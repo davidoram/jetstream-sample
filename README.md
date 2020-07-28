@@ -56,7 +56,7 @@ Messages:
 
 - Messages are private
 - Config moved to NATS
-- Each client has to know and publish/subscribe to a separate `Subject` eg: `device.event.{client-id}`, & `config.changed.{device-id}`
+- Each client has to know and publish/subscribe to a separate `Subject` eg: `iot.event.{client-id}`, & `config.changed.{device-id}`
 
 ## To run
 
