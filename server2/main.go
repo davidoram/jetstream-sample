@@ -29,7 +29,7 @@ func main() {
 	defer nc.Close()
 	log.Printf("event listener connected")
 
-	// Listen for 'device.event'
+	// Listen for 'iot.event'
 	go runEventListener(nc, *username)
 
 	// Post 'config.changed'	int
@@ -48,7 +48,7 @@ func main() {
 }
 
 func runEventListener(nc *nats.Conn, user string) {
-	sub, _ := nc.SubscribeSync("device.event.>")
+	sub, _ := nc.SubscribeSync("iot.event.>")
 	for {
 		m, err := sub.NextMsg(5 * time.Second)
 		if err == nil {

@@ -31,14 +31,14 @@ func main() {
 	// Listen for 'config.changed'
 	go runEventListener(nc, *clientNum, *username)
 
-	// Post 'device.event'
+	// Post 'iot.event'
 	i := 0
-	subject := "device.event"
+	subject := fmt.Sprintf("iot.event.%d", *clientNum)
 	for {
 		time.Sleep(time.Second * 10)
 		log.Printf("%s PUB %s", *username, subject)
 		msg := &nats.Msg{
-			Subject: fmt.Sprintf("%s", subject),
+			Subject: subject,
 			Data:    []byte(fmt.Sprintf("Event on device %d", *clientNum)),
 		}
 		i = i + 1

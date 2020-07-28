@@ -3,8 +3,11 @@
 Install nats-server (Jetstream ) locally
 
 ```
+git checkout git@github.com:nats-io/nats-server.git
+git pull
+go install
 nats-server -v
-nats-server: v2.2.0-beta.19
+nats-server: v2.2.0-beta.20
 ```
 
 
@@ -20,9 +23,9 @@ Messages:
 - `iot.event` Sent from device -> backend
 - `config.device` Sent from backend -> device
 
-## Architecture
+## Goal
 
-- All messages are public, no isolation of client1 from client2
+- Messages are public
 - Each client has to know and publish/subscribe to a separate `Subject` eg: `device.event.{client-id}`, & `config.changed.{device-id}`
 
 ## To run
@@ -49,9 +52,9 @@ Messages:
 - `iot.event` Sent from device -> backend
 - `config.device` Sent from backend -> device
 
-## Architecture
+## Goal
 
-- Messages for each client are isolated from one another
+- Messages are private
 - Config moved to NATS
 - Each client has to know and publish/subscribe to a separate `Subject` eg: `device.event.{client-id}`, & `config.changed.{device-id}`
 
