@@ -62,6 +62,11 @@ Messages:
 
 In 4 sessions run the following:
 
+```
+cd sample2
+docker-compose up
+```
+
 `nats-server --config 2.config`
 
 `go run server2/main.go -m 2 -u server -p a`
@@ -69,3 +74,7 @@ In 4 sessions run the following:
 `go run client2/main.go -n 1 -u client1 -p b`
 
 `go run client2/main.go -n 2 -u client2 -p c`
+
+
+https://max.pfingsthorn.de/news/2016/05/code-simulating-network-links-with-docker/
+https://github.com/maxpfingsthorn/mini-network-simulator

@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+
+  nats:
+    image: synadia/jsm:latest
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+      - "6222:6222"
+    volumes:
+      - "./ngs-server.conf:/ngs-server.conf"
