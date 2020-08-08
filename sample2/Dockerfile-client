@@ -5,6 +5,7 @@ RUN mkdir -p src/github.com/davidoram && \
     cd src/github.com/davidoram/ && \
     git clone https://github.com/davidoram/jetstream-sample.git
 RUN cd src/github.com/davidoram/jetstream-sample && \
+    git pull && \
     go build -o /iot-client client2/main.go
 
 FROM alpine:latest
