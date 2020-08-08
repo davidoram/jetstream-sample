@@ -1,0 +1,14 @@
+FROM golang:1.14-alpine AS builder
+
+RUN apk add --update git
+RUN mkdir -p src/github.com/davidoram && \
+    cd src/github.com/davidoram/ && \
+    git clone https://github.com/davidoram/jetstream-sample.git
+RUN cd src/github.com/davidoram/jetstream-sample && \
+    go build -o /iot-client client2/main.go
+
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+COPY --from=builder /iot-client /usr/local/bin
+CMD ["iot-client"]

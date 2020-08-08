@@ -64,6 +64,8 @@ In 4 sessions run the following:
 
 ```
 cd sample2
+docker image rm davidoram/sample2-client:latest davidoram/sample2-server:latest
+docker-compose build
 docker-compose up
 ```
 

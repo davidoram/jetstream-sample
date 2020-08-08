@@ -13,12 +13,14 @@ func main() {
 	maxClient := flag.Int("m", 1, "Clients to send to 1..m, an int")
 	username := flag.String("u", "", "Nats username")
 	password := flag.String("p", "", "Nats password")
+	server := flag.String("s", "", "Nats server")
+
 	flag.Parse()
 
-	log.Printf("Server 1 started. 1->%d clients", *maxClient)
+	log.Printf("Server 1 started. Connecting to NATs: %s, 1->%d clients", *server, *maxClient)
 
 	opts := nats.Options{
-		Servers:  []string{"localhost"},
+		Servers:  []string{*server},
 		User:     *username,
 		Password: *password,
 	}

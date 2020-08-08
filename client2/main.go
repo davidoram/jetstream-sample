@@ -13,11 +13,12 @@ func main() {
 	clientNum := flag.Int("n", 1, "Client identifier, an int")
 	username := flag.String("u", "", "Nats username")
 	password := flag.String("p", "", "Nats password")
+	server := flag.String("s", "", "Nats server")
 	flag.Parse()
-	log.Printf("Client %d started", *clientNum)
+	log.Printf("Client %d started, connecting to NATs: %s", *clientNum, *server)
 
 	opts := nats.Options{
-		Servers:  []string{"localhost"},
+		Servers:  []string{*server},
 		User:     *username,
 		Password: *password,
 	}

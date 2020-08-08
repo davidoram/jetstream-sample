@@ -9,3 +9,31 @@ services:
       - "6222:6222"
     volumes:
       - "./ngs-server.conf:/ngs-server.conf"
+
+  server:
+    depends_on:
+      - nats
+    build:
+      context: ./
+      dockerfile: Dockerfile-server
+      labels:
+        description: "sample2-server"
+    image: davidoram/sample2-server:latest
+    command: iot-server -m 2 -u server -p a -s nats
+
+  client1:
+    depends_on:
+      - nats
+    build:
+      context: ./
+      dockerfile: Dockerfile-client
+      labels:
+        description: "sample2-client"
+    image: davidoram/sample2-client:latest
+    command: iot-client -n 1 -u client1 -p b -s nats
+
+  client2:
+    depends_on:
+      - nats
+    image: davidoram/sample2-client:latest
+    command: iot-client -n 2 -u client2 -p c -s nats
