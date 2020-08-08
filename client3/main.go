@@ -40,7 +40,7 @@ func main() {
 	subject := "iot.event"
 	for {
 		time.Sleep(time.Second * 10)
-		e := fmt.Sprintf("Event on device %d, %s", *clientNum, rand.Int())
+		e := fmt.Sprintf("Event on device %d, %d", *clientNum, rand.Int())
 		log.Printf("PUB subject: '%s', msg: '%s'", subject, e)
 		msg := &nats.Msg{
 			Subject: subject,
