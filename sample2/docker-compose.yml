@@ -2,13 +2,9 @@ version: "3.8"
 services:
 
   nats:
-    image: synadia/jsm:latest
-    ports:
-      - "4222:4222"
-      - "8222:8222"
-      - "6222:6222"
+    image: synadia/nats-server:nightly
     volumes:
-      - "./ngs-server.conf:/ngs-server.conf"
+      - "./ngs-server.conf:/nats/conf/nats-server.conf"
 
   server:
     depends_on:
@@ -19,7 +15,7 @@ services:
       labels:
         description: "sample2-server"
     image: davidoram/sample2-server:latest
-    command: iot-server -m 2 -u server -p a -s nats://nats:4222
+    command: iot-server -m 2 -u server -p a -s 'nats://nats'
 
   client1:
     depends_on:
@@ -30,10 +26,10 @@ services:
       labels:
         description: "sample2-client"
     image: davidoram/sample2-client:latest
-    command: wait-for nats:4222 -t 30 -- iot-client -n 1 -u client1 -p b -s nats://nats:4222
+    command: wait-for nats:4222 -t 30 -- iot-client -n 1 -u client1 -p b -s 'nats://nats'
 
   client2:
     depends_on:
       - nats
     image: davidoram/sample2-client:latest
-    command: wait-for nats:4222 -t 30 -- iot-client -n 2 -u client2 -p c -s nats://nats:4222
+    command: wait-for nats:4222 -t 30 -- iot-client -n 2 -u client2 -p c -s 'nats://nats'
