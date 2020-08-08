@@ -7,9 +7,11 @@ RUN mkdir -p src/github.com/davidoram && \
 RUN cd src/github.com/davidoram/jetstream-sample && \
     git pull && \
     go build -o /iot-client client2/main.go
+COPY wait-for /
 
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 COPY --from=builder /iot-client /usr/local/bin
+COPY --from=builder /wait-for /usr/local/bin
 CMD ["iot-client"]
