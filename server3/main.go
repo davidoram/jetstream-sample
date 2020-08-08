@@ -53,7 +53,7 @@ func main() {
 }
 
 func runEventListener(nc *nats.Conn) {
-	sub, _ := nc.SubscribeSync("iot.event.>")
+	sub, _ := nc.SubscribeSync("remote.events.>")
 	for {
 		m, err := sub.NextMsg(5 * time.Second)
 		if err == nil {
