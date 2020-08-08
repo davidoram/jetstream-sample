@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"time"
 
 	nats "github.com/nats-io/nats.go"
@@ -32,30 +33,31 @@ func main() {
 	log.Printf("event listener connected")
 
 	// Listen for 'config.changed'
-	go runEventListener(nc, *clientNum, *username)
+	go runEventListener(nc, *clientNum)
 
 	// Post 'iot.event'
 	i := 0
 	subject := "iot.event"
 	for {
 		time.Sleep(time.Second * 10)
-		log.Printf("sent %s PUB %s", *username, subject)
+		e := fmt.Sprintf("Event on device %d, %s", *clientNum, rand.Int())
+		log.Printf("PUB subject: '%s', msg: '%s'", subject, e)
 		msg := &nats.Msg{
 			Subject: subject,
-			Data:    []byte(fmt.Sprintf("Event on device %d", *clientNum)),
+			Data:    []byte(e),
 		}
 		i = i + 1
 		nc.PublishMsg(msg)
 	}
 }
 
-func runEventListener(nc *nats.Conn, clientNum int, user string) {
+func runEventListener(nc *nats.Conn, clientNum int) {
 	subject := "config.changed"
 	sub, _ := nc.SubscribeSync(subject)
 	for {
 		m, err := sub.NextMsg(5 * time.Second)
 		if err == nil {
-			log.Printf("received %s MSG %s %s\n", user, m.Subject, string(m.Data))
+			log.Printf("MSG subject: '%s', data: '%s'\n", m.Subject, string(m.Data))
 		} else {
 			//log.Println("NextMsg timed out.")
 		}

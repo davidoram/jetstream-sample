@@ -34,29 +34,30 @@ func main() {
 	log.Printf("event listener connected")
 
 	// Listen for 'iot.event'
-	go runEventListener(nc, *username)
+	go runEventListener(nc)
 
 	// Post 'config.changed'	int
 	for {
 		time.Sleep(time.Second * 10)
 		for i := 1; i <= *maxClient; i += 1 {
 			subject := fmt.Sprintf("config.changed.%d", i)
-			log.Printf("sent %s PUB %s", *username, subject)
+			e := fmt.Sprintf("Config change for client %d", i)
+			log.Printf("PUB subject: %s, data: '%s'", subject, e)
 			msg := &nats.Msg{
 				Subject: subject,
-				Data:    []byte(fmt.Sprintf("New config for client %d", i)),
+				Data:    []byte(e),
 			}
 			nc.PublishMsg(msg)
 		}
 	}
 }
 
-func runEventListener(nc *nats.Conn, user string) {
+func runEventListener(nc *nats.Conn) {
 	sub, _ := nc.SubscribeSync("iot.event.>")
 	for {
 		m, err := sub.NextMsg(5 * time.Second)
 		if err == nil {
-			log.Printf("received %s MSG %s %s\n", user, m.Subject, string(m.Data))
+			log.Printf("MSG subject: '%s', data: '%s'\n", m.Subject, string(m.Data))
 		} else {
 			//log.Println("NextMsg timed out.")
 		}

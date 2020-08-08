@@ -13,7 +13,7 @@ services:
       context: ./
       dockerfile: Dockerfile-server
       labels:
-        description: "sample2-server"
+        description: "sample3-server"
     image: davidoram/sample3-server:latest
     command: iot-server -m 2 -u server -p a -s 'nats://nats'
 
