@@ -17,7 +17,9 @@ func main() {
 
 	flag.Parse()
 
-	log.Printf("Server 1 started. Connecting to NATs: %s, 1->%d clients", *server, *maxClient)
+	log.Printf("Server v2 started")
+	log.Printf("-----------------")
+	log.Printf("Connecting to NATs: %s, 1->%d clients", *server, *maxClient)
 
 	opts := nats.Options{
 		Servers:  []string{*server},

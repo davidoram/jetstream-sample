@@ -15,7 +15,7 @@ func main() {
 	password := flag.String("p", "", "Nats password")
 	server := flag.String("s", "", "Nats server")
 	flag.Parse()
-	log.Printf("Client v2")
+	log.Printf("Client v3")
 	log.Printf("---------")
 	log.Printf("Id %d started, connecting to NATs: %s", *clientNum, *server)
 
@@ -36,7 +36,7 @@ func main() {
 
 	// Post 'iot.event'
 	i := 0
-	subject := fmt.Sprintf("iot.event.%d", *clientNum)
+	subject := "iot.event"
 	for {
 		time.Sleep(time.Second * 10)
 		log.Printf("%s PUB %s", *username, subject)
@@ -50,7 +50,7 @@ func main() {
 }
 
 func runEventListener(nc *nats.Conn, clientNum int, user string) {
-	subject := "config.changed.>"
+	subject := "config.changed"
 	sub, _ := nc.SubscribeSync(subject)
 	for {
 		m, err := sub.NextMsg(5 * time.Second)

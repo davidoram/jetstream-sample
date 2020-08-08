@@ -12,7 +12,9 @@ import (
 func main() {
 	clientNum := flag.Int("client-num", 1, "an int")
 	flag.Parse()
-	log.Printf("Client %d started", *clientNum)
+	log.Printf("Client v1")
+	log.Printf("---------")
+	log.Printf("Id %d started", *clientNum)
 
 	nc, err := nats.Connect("localhost")
 	if err != nil {

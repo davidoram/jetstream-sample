@@ -10,14 +10,16 @@ import (
 )
 
 func main() {
-	clientNum := flag.Int("n", 1, "Client identifier, an int")
+	maxClient := flag.Int("m", 1, "Clients to send to 1..m, an int")
 	username := flag.String("u", "", "Nats username")
 	password := flag.String("p", "", "Nats password")
 	server := flag.String("s", "", "Nats server")
+
 	flag.Parse()
-	log.Printf("Client v2")
-	log.Printf("---------")
-	log.Printf("Id %d started, connecting to NATs: %s", *clientNum, *server)
+
+	log.Printf("Server v3 started")
+	log.Printf("-----------------")
+	log.Printf("Connecting to NATs: %s, 1->%d clients", *server, *maxClient)
 
 	opts := nats.Options{
 		Servers:  []string{*server},
@@ -31,27 +33,26 @@ func main() {
 	defer nc.Close()
 	log.Printf("event listener connected")
 
-	// Listen for 'config.changed'
-	go runEventListener(nc, *clientNum, *username)
+	// Listen for 'iot.event'
+	go runEventListener(nc, *username)
 
-	// Post 'iot.event'
-	i := 0
-	subject := fmt.Sprintf("iot.event.%d", *clientNum)
+	// Post 'config.changed'	int
 	for {
 		time.Sleep(time.Second * 10)
-		log.Printf("%s PUB %s", *username, subject)
-		msg := &nats.Msg{
-			Subject: subject,
-			Data:    []byte(fmt.Sprintf("Event on device %d", *clientNum)),
+		for i := 1; i <= *maxClient; i += 1 {
+			subject := fmt.Sprintf("config.changed.%d", i)
+			log.Printf("%s PUB %s", *username, subject)
+			msg := &nats.Msg{
+				Subject: subject,
+				Data:    []byte(fmt.Sprintf("New config for client %d", i)),
+			}
+			nc.PublishMsg(msg)
 		}
-		i = i + 1
-		nc.PublishMsg(msg)
 	}
 }
 
-func runEventListener(nc *nats.Conn, clientNum int, user string) {
-	subject := "config.changed.>"
-	sub, _ := nc.SubscribeSync(subject)
+func runEventListener(nc *nats.Conn, user string) {
+	sub, _ := nc.SubscribeSync("iot.event")
 	for {
 		m, err := sub.NextMsg(5 * time.Second)
 		if err == nil {

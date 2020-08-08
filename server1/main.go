@@ -13,7 +13,9 @@ func main() {
 	maxClient := flag.Int("max-client", 1, "an int")
 	flag.Parse()
 
-	log.Printf("Server 1 started. 1->%d clients", *maxClient)
+	log.Printf("Server v1 started")
+	log.Printf("-----------------")
+	log.Printf("1->%d clients", *maxClient)
 
 	nc, err := nats.Connect("localhost")
 	if err != nil {

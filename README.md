@@ -54,9 +54,11 @@ Messages:
 
 ## Goal
 
-- Messages are private
+- Messages are private to each client
 - Config moved to NATS
-- Each client has to know and publish/subscribe to a separate `Subject` eg: `iot.event.{client-id}`, & `config.changed.{device-id}`
+- Each client must know about its own unique identifier:
+  - publishes to `iot.event.{client-id}`
+  - subscribes to `config.changed.{client-id}`
 
 ## To run
 
@@ -69,14 +71,37 @@ docker-compose build
 docker-compose up
 ```
 
-`nats-server --config 2.config`
+# Sample 3. Use NATS Accounts for multi-tenancy
 
-`go run server2/main.go -m 2 -u server -p a`
+## IOT message flows
 
-`go run client2/main.go -n 1 -u client1 -p b`
+2 iot devices
+1 backend server
 
-`go run client2/main.go -n 2 -u client2 -p c`
+Messages:
 
+- `iot.event` Sent from device -> backend
+- `config.device` Sent from backend -> device
+
+## Goal
+
+- Messages are private to each client
+- Config moved to NATS
+- Move entire knowlege of separate `{client-id}` into the configuration layer inside NATS
+- Each client:
+  - publishes to `iot.event`
+  - subscribes to `config.changed`
+
+## To run
+
+In 4 sessions run the following:
+
+```
+cd sample3
+docker image rm davidoram/sample3-client:latest davidoram/sample3-server:latest
+docker-compose build
+docker-compose up
+```
 
 https://max.pfingsthorn.de/news/2016/05/code-simulating-network-links-with-docker/
 https://github.com/maxpfingsthorn/mini-network-simulator
