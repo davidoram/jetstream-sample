@@ -15,7 +15,7 @@ services:
       labels:
         description: "sample3-server"
     image: davidoram/sample3-server:latest
-    command: iot-server -m 2 -u server -p a -s 'nats://nats'
+    command: iot-server3 -m 2 -u server -p a -s 'nats://nats'
 
   client1:
     depends_on:
@@ -26,10 +26,10 @@ services:
       labels:
         description: "sample3-client"
     image: davidoram/sample3-client:latest
-    command: wait-for nats:4222 -t 30 -- iot-client -n 1 -u client1 -p b -s 'nats://nats'
+    command: wait-for nats:4222 -t 30 -- iot-client3 -n 1 -u client1 -p b -s 'nats://nats'
 
   client2:
     depends_on:
       - nats
     image: davidoram/sample3-client:latest
-    command: wait-for nats:4222 -t 30 -- iot-client -n 2 -u client2 -p c -s 'nats://nats'
+    command: wait-for nats:4222 -t 30 -- iot-client3 -n 2 -u client2 -p c -s 'nats://nats'
