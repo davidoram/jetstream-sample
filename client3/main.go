@@ -39,7 +39,7 @@ func main() {
 	subject := "iot.event"
 	for {
 		time.Sleep(time.Second * 10)
-		log.Printf("%s PUB %s", *username, subject)
+		log.Printf("sent %s PUB %s", *username, subject)
 		msg := &nats.Msg{
 			Subject: subject,
 			Data:    []byte(fmt.Sprintf("Event on device %d", *clientNum)),
@@ -55,7 +55,7 @@ func runEventListener(nc *nats.Conn, clientNum int, user string) {
 	for {
 		m, err := sub.NextMsg(5 * time.Second)
 		if err == nil {
-			log.Printf("%s MSG %s %s\n", user, m.Subject, string(m.Data))
+			log.Printf("received %s MSG %s %s\n", user, m.Subject, string(m.Data))
 		} else {
 			//log.Println("NextMsg timed out.")
 		}
