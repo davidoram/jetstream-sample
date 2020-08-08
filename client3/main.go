@@ -52,7 +52,7 @@ func main() {
 }
 
 func runEventListener(nc *nats.Conn, clientNum int) {
-	subject := "config.changed"
+	subject := "config.changed.>"
 	sub, _ := nc.SubscribeSync(subject)
 	for {
 		m, err := sub.NextMsg(5 * time.Second)
