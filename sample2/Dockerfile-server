@@ -6,8 +6,8 @@ RUN mkdir -p src/github.com/davidoram && \
     git clone https://github.com/davidoram/jetstream-sample.git
 RUN cd src/github.com/davidoram/jetstream-sample && \
     git pull && \
-    go build -o /iot-server server2/main.go
-COPY src/github.com/davidoram/jetstream-sample/wait-for /
+    go build -o /iot-server server2/main.go && \
+    cp ./wait-for /
 
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
