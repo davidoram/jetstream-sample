@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"time"
 
 	nats "github.com/nats-io/nats.go"
@@ -38,10 +39,12 @@ func main() {
 
 	// Post 'config.changed'	int
 	for {
-		time.Sleep(time.Second * 10)
+		time.Sleep(time.Second * 5)
 		for i := 1; i <= *maxClient; i += 1 {
+			duration := time.Duration(rand.Int63n(10-2) + 2)
+			time.Sleep(time.Second * duration)
 			subject := fmt.Sprintf("config.changed.%d %s", i, symbol(i))
-			e := fmt.Sprintf("Config change for client %d", i)
+			e := fmt.Sprintf("Config change for client %d %s", i, symbol(i))
 			log.Printf("PUB subject: %s, data: '%s'", subject, e)
 			msg := &nats.Msg{
 				Subject: subject,
