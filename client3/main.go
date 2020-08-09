@@ -41,7 +41,7 @@ func main() {
 	for {
 		duration := time.Duration(rand.Int63n(10-2) + 2)
 		time.Sleep(time.Second * duration)
-		e := fmt.Sprintf("Event on device %d, %s %d", *clientNum, symbol(*clientNum), rand.Int())
+		e := fmt.Sprintf("Event on device %d, %s, counter: %d", *clientNum, symbol(*clientNum), i)
 		log.Printf("PUB subject: '%s', msg: '%s'", subject, e)
 		msg := &nats.Msg{
 			Subject: subject,

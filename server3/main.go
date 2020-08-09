@@ -38,12 +38,13 @@ func main() {
 	go runEventListener(nc)
 
 	// Post 'config.changed'	int
+	j := 1
 	for {
 		time.Sleep(time.Second * 5)
 		for i := 1; i <= *maxClient; i += 1 {
 			duration := time.Duration(rand.Int63n(10-2) + 2)
 			time.Sleep(time.Second * duration)
-			subject := fmt.Sprintf("config.changed.%d %s", i, symbol(i))
+			subject := fmt.Sprintf("config.changed.%d %s counter: %d", i, symbol(i), j)
 			e := fmt.Sprintf("Config change for client %d %s", i, symbol(i))
 			log.Printf("PUB subject: %s, data: '%s'", subject, e)
 			msg := &nats.Msg{
@@ -53,6 +54,7 @@ func main() {
 			nc.PublishMsg(msg)
 		}
 	}
+	j = j + 1
 }
 
 func runEventListener(nc *nats.Conn) {
