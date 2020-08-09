@@ -40,7 +40,7 @@ func main() {
 	subject := "iot.event"
 	for {
 		time.Sleep(time.Second * 10)
-		e := fmt.Sprintf("Event on device %d, %d", *clientNum, rand.Int())
+		e := fmt.Sprintf("Event on device %d, %s %d", *clientNum, symbol(*clientNum), rand.Int())
 		log.Printf("PUB subject: '%s', msg: '%s'", subject, e)
 		msg := &nats.Msg{
 			Subject: subject,
@@ -61,5 +61,16 @@ func runEventListener(nc *nats.Conn, clientNum int) {
 		} else {
 			//log.Println("NextMsg timed out.")
 		}
+	}
+}
+
+func symbol(clientNum int) string {
+	switch clientNum {
+	case 1:
+		return "🍌"
+	case 2:
+		return "🍎"
+	default:
+		return "🥝"
 	}
 }

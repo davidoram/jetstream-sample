@@ -40,7 +40,7 @@ func main() {
 	for {
 		time.Sleep(time.Second * 10)
 		for i := 1; i <= *maxClient; i += 1 {
-			subject := fmt.Sprintf("config.changed.%d", i)
+			subject := fmt.Sprintf("config.changed.%d %s", i, symbol(i))
 			e := fmt.Sprintf("Config change for client %d", i)
 			log.Printf("PUB subject: %s, data: '%s'", subject, e)
 			msg := &nats.Msg{
@@ -61,5 +61,16 @@ func runEventListener(nc *nats.Conn) {
 		} else {
 			//log.Println("NextMsg timed out.")
 		}
+	}
+}
+
+func symbol(clientNum int) string {
+	switch clientNum {
+	case 1:
+		return "🍌"
+	case 2:
+		return "🍎"
+	default:
+		return "🥝"
 	}
 }
