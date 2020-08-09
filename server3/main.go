@@ -44,8 +44,8 @@ func main() {
 		for i := 1; i <= *maxClient; i += 1 {
 			duration := time.Duration(rand.Int63n(10-2) + 2)
 			time.Sleep(time.Second * duration)
-			subject := fmt.Sprintf("config.changed.%d %s counter: %d", i, symbol(i), j)
-			e := fmt.Sprintf("Config change for client %d %s", i, symbol(i))
+			subject := fmt.Sprintf("config.changed.%d", i)
+			e := fmt.Sprintf("Config change for client %d %s, counter: %d", i, symbol(i), j)
 			log.Printf("PUB subject: %s, data: '%s'", subject, e)
 			msg := &nats.Msg{
 				Subject: subject,
@@ -53,8 +53,8 @@ func main() {
 			}
 			nc.PublishMsg(msg)
 		}
+		j = j + 1
 	}
-	j = j + 1
 }
 
 func runEventListener(nc *nats.Conn) {
