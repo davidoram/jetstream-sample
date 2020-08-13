@@ -1,0 +1,60 @@
+version: "3.8"
+services:
+
+  nats:
+    image: synadia/nats-server:nightly
+    volumes:
+      - "./ngs-server.conf:/nats/conf/nats-server.conf"
+    networks:
+      - backend
+      - client-1
+      - client-2
+
+  server:
+    depends_on:
+      - nats
+    build:
+      context: ./
+      dockerfile: Dockerfile-server
+      labels:
+        description: "sample3-server"
+    image: davidoram/sample3-server:latest
+    command: iot-server3 -m 2 -u server -p a -s 'nats://nats'
+    networks:
+      - backend
+
+
+  client1-nats:
+    image: synadia/nats-server:nightly
+    volumes:
+      - "./ngs-server-leaf1.conf:/nats/conf/nats-server.conf"
+    networks:
+      - client-1
+      - backend
+
+  client1:
+    depends_on:
+      - nats
+    build:
+      context: ./
+      dockerfile: Dockerfile-client
+      labels:
+        description: "sample3-client"
+    image: davidoram/sample3-client:latest
+    command: wait-for client1-nats:4222 -t 30 -- iot-client3 -n 1 -u client1 -p b -s 'nats://client1-nats'
+    networks:
+      - client-1
+
+  client2:
+    depends_on:
+      - nats
+    image: davidoram/sample3-client:latest
+    command: wait-for nats:4222 -t 30 -- iot-client3 -n 2 -u client2 -p c -s 'nats://nats'
+    networks:
+      - client-2
+      - backend
+
+networks:
+  backend:
+  client-1:
+  client-2:

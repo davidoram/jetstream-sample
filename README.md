@@ -103,5 +103,33 @@ docker-compose build --no-cache
 docker-compose up
 ```
 
+# Sample 4. Sample 3 showing network failure
+
+## IOT message flows
+
+2 iot devices
+1 backend server
+
+Messages:
+
+- `iot.event` Sent from device -> backend
+- `config.device` Sent from backend -> device
+
+## Goal
+
+- Show that messages are lost when the network connection is disrupted
+
+## To run
+
+In 4 sessions run the following:
+
+```
+cd sample4
+docker image rm davidoram/sample4-client:latest davidoram/sample4-server:latest
+docker-compose build --no-cache
+docker-compose up
+```
+
+
 https://max.pfingsthorn.de/news/2016/05/code-simulating-network-links-with-docker/
 https://github.com/maxpfingsthorn/mini-network-simulator

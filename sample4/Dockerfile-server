@@ -1,0 +1,22 @@
+FROM golang:1.14-alpine AS builder
+
+RUN apk add --update git
+RUN git clone https://github.com/maxpfingsthorn/mini-network-simulator.git
+RUN cd mini-network-simulator && \
+    chmod a+x *.sh && \
+    cp ./*.sh /
+RUN mkdir -p src/github.com/davidoram && \
+    cd src/github.com/davidoram/ && \
+    git clone https://github.com/davidoram/jetstream-sample.git
+RUN cd src/github.com/davidoram/jetstream-sample && \
+    git pull && \
+    go build -o /iot-server3 server3/main.go && \
+    cp ./wait-for /
+
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+COPY --from=builder /iot-server3 /usr/local/bin
+COPY --from=builder /wait-for /usr/local/bin
+COPY --from=builder /*.sh /usr/local/bin/
+CMD ["iot-server3"]
